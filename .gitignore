@@ -1,3 +1,16 @@
 .DS_Store
+Thumbs.db
 __pycache__/
 *.pyc
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.env
+.env.*
+
+# Generated local / CI reports
+upstream-review-report.md
+dependency-freshness-report.md

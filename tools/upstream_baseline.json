@@ -1,0 +1,7 @@
+{
+  "repo": "https://github.com/KKKKhazix/human-writing.git",
+  "branch": "main",
+  "reviewed_through": "4fda173f3fef7fb808f3eba991eeb2528ea4b189",
+  "reviewed_date": "2026-08-22",
+  "notes": "SanHsien fork baseline at clone time. HEAD is upstream main commit docs: 重写 README，去掉产品说明书腔."
+}
