@@ -13,6 +13,17 @@
 - 不把產品規則翻譯成繁體；產品語言跟隨上游。
 - 上游更新必須逐筆審查。
 
+## 2026-08-22：維護線直接推 main
+
+**決定**：fork 維護不再開功能分支。改完在本機跑 gate，通過後直接推 `origin/main`。遠端只留 `main`；`upstream/main` 只追蹤。
+
+**理由**：這是單人維護 fork，分支與 PR 沒有第二審查者，只增加同步成本。
+
+**限制**：
+- Dependabot 與外部 fork 仍可能開 PR，讀 diff 後再合併，不自動合併。
+- 不推 `upstream`，不 force-push `main`。
+- 不刪 `upstream` remote。
+
 ## 2026-08-22：不啟用 Dependabot 自動合併
 
 **決定**：Dependabot 只開 PR；CI 與人工讀 diff 通過後才合併。

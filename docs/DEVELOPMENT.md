@@ -58,7 +58,7 @@ pwsh -NoProfile -File tools\dev_check.ps1
 4. `python tools/validate_skill.py human-writing/SKILL.md`
 5. `python tools/check_links.py`
 
-PR CI 在 Ubuntu 跑 3.9–3.14，並加一個 Windows Python 3.14 job 跑同一套 gate。
+CI 在 Ubuntu 跑 3.9–3.14，並加一個 Windows Python 3.14 job 跑同一套 gate。推 `main` 前先跑本機 gate。
 
 ## 不要做的事
 

@@ -16,10 +16,13 @@ python -m venv .venv
 pwsh -NoProfile -File tools\dev_check.ps1
 ```
 
-## Pull Request
+## 提交方式
 
-- 一個 PR 聚焦一個問題。
+本 fork 由維護者直接推 `main`，不開短期分支。改完先跑上面的 Windows gate。
+
+- 一次提交聚焦一個問題。
 - Bug 修正先附失敗測試；新行為需涵蓋成功、邊界與錯誤路徑。
 - 修改使用方式時同步更新 `README.md` 與 `README.en.md`。
 - 說明是否來自 upstream、是否改動產品 `SKILL.md`／`check_prose.py`，以及實際跑過哪些指令。
 - 提交訊息建議使用 `fix:`、`feat:`、`docs:`、`test:`、`chore:`。
+- Dependabot 與外部 fork 仍可能開 Pull Request；合併前讀 diff，不要自動合併。
