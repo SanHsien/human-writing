@@ -17,7 +17,7 @@
  human-writing/scripts/check_prose.py
         │
         ▼
- 硬禁令清零才可交稿。警告項（「需要人工判斷」）exit 0，不能只看結束碼。
+ 硬禁令清零才可交稿；警告項留給人判斷
 ```
 
 `human-writing/` 是要安裝到 Agent Skills 目錄的產品。根目錄其餘檔案是本 fork 的開發與治理骨架，不要一起複製進 `~/.agents/skills/`。
@@ -38,16 +38,6 @@ pwsh -NoProfile -File tools\dev_check.ps1
 .venv\Scripts\python human-writing\scripts\check_prose.py 稿件.md
 ```
 
-檢查器結束碼：
-
-| 結束碼 | 含義 | 能不能交稿 |
-|---|---|---|
-| 0 | 沒有硬禁令。仍可能印出「需要人工判斷」 | 要讀完整輸出。變形翻案句、語境黑話、「不只……還……」只會警告 |
-| 1 | 「需要修改」：硬停詞、硬翻案句、破折號、提示冒號、模型路標、硬黑話 | 不能交 |
-| 2 | 讀檔失敗或沒有漢字 | 先修輸入 |
-
-`SKILL.md` 把部分翻案腔變形寫成「絕對不能出現」，腳本目前只警告。本 fork 不自行把警告升成硬失敗。Agent 與維護者交稿時要看「需要修改」與「需要人工判斷」兩段，不能只看 exit 0。
-
 ## Canonical gate
 
 `tools\dev_check.ps1` 會依序：
@@ -58,7 +48,7 @@ pwsh -NoProfile -File tools\dev_check.ps1
 4. `python tools/validate_skill.py human-writing/SKILL.md`
 5. `python tools/check_links.py`
 
-PR CI 在 Ubuntu 跑 3.9–3.14，並加一個 Windows Python 3.14 job 跑同一套 gate。
+PR CI 在 Ubuntu 跑 3.9–3.13，並加一個 Windows job 跑同一套 gate。
 
 ## 不要做的事
 

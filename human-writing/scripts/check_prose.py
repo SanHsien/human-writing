@@ -10,13 +10,6 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 
-# 本 fork 修正：Windows 預設 CP950／GBK 主控台印中文會 UnicodeEncodeError。
-for _stream in (sys.stdout, sys.stderr, sys.stdin):
-    try:
-        _stream.reconfigure(encoding="utf-8")
-    except (AttributeError, ValueError, OSError):
-        pass
-
 
 HARD_STOPS = (
     "说白了",
