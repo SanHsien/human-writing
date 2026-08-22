@@ -14,3 +14,8 @@ venv/
 # Generated local / CI reports
 upstream-review-report.md
 dependency-freshness-report.md
+
+# User manuscripts — do not commit
+drafts/
+manuscripts/
+*.draft.md

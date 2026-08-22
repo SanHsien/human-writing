@@ -18,3 +18,18 @@
 **決定**：Dependabot 只開 PR；CI 與人工讀 diff 通過後才合併。
 
 **理由**：開發依賴只有 pytest / ruff，體積小，但自動合併仍會跳過「讀 diff」這一步。
+
+## 2026-08-22：check_prose.py 重設 UTF-8 stdio
+
+**決定**：在 `human-writing/scripts/check_prose.py` 開頭把 stdin／stdout／stderr `reconfigure(encoding="utf-8")`。不改硬禁令、警告層或正則。不同步回上游，除非之後另開回貢。
+
+**理由**：Windows 預設 CP950 主控台印「漢字數」會 `UnicodeEncodeError`。本機 gate 的 `PYTHONUTF8=1` 遮不住一般使用者直接跑腳本。這是執行環境修正，不是寫作規則變更。
+
+**限制**：上游若重寫 `check_prose.py`，merge 時要保留這段 stdio 重設，並重跑 `test_checker_prints_on_cp950_stdio`。
+
+## 2026-08-22：不把警告層升成硬失敗
+
+**決定**：變形翻案句、「不只……還……」、語境詞「不丟」維持警告（exit 0）。契約寫在 `docs/DEVELOPMENT.md` 與測試裡。
+
+**理由**：升成硬失敗會改產品行為，等於另做一套檢查器。本輪只修 fork 能修的文件、測試與 Windows 崩潰。
+
