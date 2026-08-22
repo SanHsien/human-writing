@@ -31,13 +31,13 @@
 
 ## 開發原則
 
-- 一般修改直接在 `main` 上做：本機跑 Windows gate，通過後推 `origin/main`。不要再開功能分支。
+- 一般修改使用短期分支：**branch → PR → CI → squash merge**。`main` 是唯一長期分支，不直接拿它當日常工作區。
 - 修 bug 先補可重現失敗測試，再做最小修正。
 - 上游公開安裝方式、`SKILL.md` 步驟與 `check_prose.py` 的硬禁令視為相容性契約。
 - 不為了套格式而大改上游程式；Ruff 只閘 E9（語法）與 F（pyflakes）。
 - 使用繁體中文回覆；使用者文件以繁中為主，公開入口同步維護 `README.en.md`。
 - 上游更新簡體 `README.md` 時：把新內容翻進本 fork 的繁中 `README.md`，並同步 `README.en.md`。
-- 提交訊息用 Conventional Commit。Dependabot 或外部 fork 仍可能開 PR，讀 `gh pr diff` 後再合併到 `main`。
+- 提交訊息用 Conventional Commit。Dependabot 或外部 fork 的變更也走 PR，讀 diff 並通過 CI 後再合併。
 - `REVIEW.md` 是風險快照，不是每個一般 bug 的流水帳。
 - 不 force-push `main`，不刪 `upstream` remote。
 
