@@ -32,6 +32,7 @@ REQUIREMENT_FILES = ("requirements-dev.txt",)
 _REQUIREMENT_RE = re.compile(r"^([A-Za-z0-9_.-]+)(?:\[[^\]]+\])?\s*(.*)$")
 _MINIMUM_RE = re.compile(r"(>=|>|==|~=)\s*([0-9][0-9A-Za-z.!+_-]*)")
 _RELEASE_RE = re.compile(r"^[0-9]+(?:\.[0-9]+)*")
+HOLD_MARKER = "freshness-hold:"
 
 
 class DependencyCheckError(RuntimeError):
@@ -43,7 +44,7 @@ def release_key(version: str) -> tuple[int, ...] | None:
 
     Pre-release and local suffixes are dropped, so 7.0.0rc1 and 7.0.0 rank the
     same. That is precise enough to answer "has the declared floor aged?" without
-    adding a PEP 440 parser to a repo whose runtime is numpy and Pillow.
+    adding a PEP 440 parser to a repo whose only dependencies are pytest and ruff.
     """
     match = _RELEASE_RE.match(version.strip())
     if not match:
@@ -71,11 +72,17 @@ def is_newer_version(latest: str, declared: str) -> bool:
 def parse_requirements(text: str, source: str) -> list[dict[str, str]]:
     packages: list[dict[str, str]] = []
     for raw_line in text.splitlines():
+        comment = raw_line.split("#", 1)[1].strip() if "#" in raw_line else ""
         line = raw_line.split("#", 1)[0].strip()
-        # "-r requirements-path1.txt" is followed separately; expanding it here
-        # would list numpy and Pillow twice.
+        # A "-r other.txt" include is followed separately; expanding it here
+        # would list the same package twice.
         if not line or line.startswith("-"):
             continue
+        # A floor can be held down by something this check cannot see -- pytest 9
+        # needs Python 3.10 while CI still tests 3.9, for one. Saying so on the
+        # line keeps the newer version visible in the report without it being
+        # reported as work to do every month.
+        hold = comment[len(HOLD_MARKER):].strip() if comment.startswith(HOLD_MARKER) else ""
         head = line.split(";", 1)[0].strip()
         match = _REQUIREMENT_RE.match(head)
         if not match:
@@ -88,6 +95,7 @@ def parse_requirements(text: str, source: str) -> list[dict[str, str]]:
                 "minimum": minimum.group(2) if minimum else "",
                 "requirement": line,
                 "source": source,
+                "hold": hold,
             }
         )
     return packages
@@ -155,6 +163,8 @@ def render_markdown(rows: list[dict[str, object]], error: str | None = None) -> 
     for row in rows:
         if row["check_failed"]:
             status = "CHECK FAILED"
+        elif row.get("hold") and row["outdated"]:
+            status = f"HELD: {row['hold']}"
         elif row["outdated"]:
             status = "REVIEW UPDATE"
         else:
@@ -187,7 +197,7 @@ def write_github_output(rows: list[dict[str, object]], report_path: Path) -> Non
     output_path = os.environ.get("GITHUB_OUTPUT")
     if not output_path:
         return
-    outdated = any(bool(row["outdated"]) for row in rows)
+    outdated = any(bool(row["outdated"]) and not row.get("hold") for row in rows)
     check_failed = not rows or any(bool(row["check_failed"]) for row in rows)
     with open(output_path, "a", encoding="utf-8") as output:
         output.write(f"outdated={'true' if outdated else 'false'}\n")
@@ -229,7 +239,10 @@ def main() -> int:
         write_github_output(rows, output_path)
     if error:
         return 2
-    if args.strict and any(bool(row["outdated"]) or bool(row["check_failed"]) for row in rows):
+    if args.strict and any(
+        (bool(row["outdated"]) and not row.get("hold")) or bool(row["check_failed"])
+        for row in rows
+    ):
         return 1
     return 0
 
