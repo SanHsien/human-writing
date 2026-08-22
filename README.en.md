@@ -19,7 +19,7 @@
   <a href="#what-it-does">Writing flow</a> ·
   <a href="#repository-layout">Layout</a> ·
   <a href="#development">Development</a> ·
-  <a href="https://github.com/SanHsien/human-writing/issues">Issues</a>
+  <a href="https://github.com/KKKKhazix/human-writing/issues">Product issues</a>
 </p>
 
 > **This is a Windows-first maintenance fork of [`KKKKhazix/human-writing`](https://github.com/KKKKhazix/human-writing).** It keeps the MIT License and full git history. Product behaviour follows upstream; this line adds Traditional Chinese docs, a Windows development gate, and commit-by-commit upstream review. See [`FORK.md`](FORK.md) and [`docs/UPSTREAM.md`](docs/UPSTREAM.md).
@@ -133,9 +133,9 @@ Details: [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md). Upstream sync: [`docs/UPS
 
 ## Feedback
 
-MIT licensed. The repository contains original rules and tools only. No third-party articles, training corpora, or model weights.
+MIT licensed. Product rules and tools are inherited from the upstream author's MIT-licensed work; this fork does not bundle third-party articles, training corpora, or model weights.
 
-If a rule conflicts, a check false-positives, or a model behaves oddly, open an issue on [this fork](https://github.com/SanHsien/human-writing/issues) or [upstream](https://github.com/KKKKhazix/human-writing/issues). Include the prompt, a sample of the model output, and what you expected.
+For product rules, false positives, or model behaviour, report the issue to [upstream](https://github.com/KKKKhazix/human-writing/issues). For Windows maintenance, CI, or fork-documentation changes, open a pull request against this fork with reproducible context.
 
 <p align="center">
   <sub>Human Writing · 1.1.0 · SanHsien maintenance fork</sub>
