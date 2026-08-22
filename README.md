@@ -19,7 +19,7 @@
   <a href="#它做什麼">寫作流程</a> ·
   <a href="#倉庫結構">倉庫結構</a> ·
   <a href="#開發">開發</a> ·
-  <a href="https://github.com/SanHsien/human-writing/issues">提交問題</a>
+  <a href="https://github.com/KKKKhazix/human-writing/issues">產品問題</a>
 </p>
 
 > **這是 [`KKKKhazix/human-writing`](https://github.com/KKKKhazix/human-writing) 的 Windows-first 維護型 fork**，沿用 MIT License 與完整 Git 歷史。產品 Skill 跟隨上游；本維護線補上繁中入口、Windows 開發／驗收 gate，以及逐筆審查的上游追蹤。差異見 [`FORK.md`](FORK.md)，同步策略見 [`docs/UPSTREAM.md`](docs/UPSTREAM.md)。
@@ -133,9 +133,9 @@ pwsh -NoProfile -File tools\dev_check.ps1
 
 ## 回饋
 
-MIT 協議開源。倉庫只有原創規則和工具，沒有第三方文章、訓練語料或模型權重。
+MIT 協議開源。產品規則與工具沿用上游原作者的 MIT 內容；本 fork 未收錄第三方文章、訓練語料或模型權重。
 
-碰到規則衝突、誤報或者某個模型上表現不對，歡迎在本 fork [提 Issue](https://github.com/SanHsien/human-writing/issues)，或回報給[上游](https://github.com/KKKKhazix/human-writing/issues)。附上你的提示詞、模型輸出片段和你覺得應該是什麼樣，排查起來快很多。
+產品規則、誤報或模型行為問題，請回報[上游 Issues](https://github.com/KKKKhazix/human-writing/issues)。若是 Windows 維護、CI 或 fork 文件問題，可直接提交 PR 到本 fork；附上可重現資訊會更容易判斷。
 
 <p align="center">
   <sub>活人感寫作 · Human Writing · 1.1.0 · SanHsien maintenance fork</sub>
