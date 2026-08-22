@@ -26,7 +26,8 @@
 - `human-writing/`：可安裝的 Skill 目錄（`SKILL.md`、references、dist、scripts）。
 - `tools/`：fork 維護工具（上游檢查、Skill 規格驗證、相對連結檢查、Windows gate）。
 - `tests/`：pytest。CI 另跑 ruff（E9+F）與 `validate_skill.py`。
-- 檢查腳本只管已寫明的硬規則；警告項不能替作者決定文體。
+- 檢查腳本只管已寫明的硬規則；警告項不能替作者決定文體。`check_prose.py` 結束碼 0 只代表沒有硬禁令，交稿仍須讀「需要人工判斷」。
+- 已記錄的 fork 修正：`check_prose.py` 把 stdin／stdout／stderr 重設成 UTF-8，避免 Windows CP950 主控台崩潰。不要在同步上游時丟掉這段。
 
 ## 開發原則
 
