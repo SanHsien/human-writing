@@ -1,0 +1,9 @@
+{
+  "repo": "https://github.com/KKKKhazix/human-writing.git",
+  "branch": "main",
+  "reviewed_through": "4fda173f3fef7fb808f3eba991eeb2528ea4b189",
+  "reviewed_date": "2026-08-23",
+  "notes": "SanHsien fork baseline at clone time. HEAD is upstream main commit docs: 重写 README，去掉产品说明书腔. 2026-08-23 重驗：commit 增量 0；PR/issue 水位未動；上一輪「沒有任何分支帶獨佔 commit」的敘述有誤（feat/workbuddy-expert 有 1 個，即 PR #6 的 head），已在 docs/UPSTREAM.md 更正並補上 PR #5／#6 與 issue #8 的逐項證據。",
+  "reviewed_pr_through": 6,
+  "reviewed_issue_through": 8
+}
