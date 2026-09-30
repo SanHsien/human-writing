@@ -79,3 +79,8 @@ PR #6 的 head，內容已在上表逐項看過——但敘述本身不準確，
 
 `4fda173`（上一輪水位）到 `upstream/main` 之間 **0 個新 commit**；open PR 仍為 #1／#5／#6，
 open issue 仍為 #2／#3／#7／#8，皆未超過水位。
+
+
+## 2026-09-30：第三輪 triage，PR 水位推進到 `#9`
+
+commit 與 issue 軸無變化；PR #9（英文翻譯）不採用，理由見 [`DECISIONS.md`](DECISIONS.md) 2026-09-30 條目。

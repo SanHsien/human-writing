@@ -87,3 +87,10 @@ commit 水位。那兩個面向不是「查過沒發現」，是根本沒查，�
 綠燈不是「沒有待辦」，是沒有人看。
 
 **觸發條件**：報告列出項目時逐筆讀 diff、把採用／略過理由寫進本檔，然後才推進 baseline 的水位。
+
+## 2026-09-30：第三輪上游審查（PR 水位 #9）
+
+- commit：`4fda173` 之後 0 個新 commit，baseline commit 不變。
+- issue：水位 #8 以上沒有新項目。
+- PR #9「feat: add English translation」（OPEN，+1309 行，新增 `README_en.md`、`SKILL_en.md`、`references/*_en.md`、`agents/openai_en.yaml` 等平行英文檔）：**不適用，不採用**。本 fork 的公開入口已自行維護 `README.en.md`（見 `AGENTS.md`），且硬性邊界規定產品 Skill、references 只跟隨上游簡體原文、不新增翻譯版本；上游尚未合併。觸發條件：上游合併 #9 後，隨 commit 軸抵達時再評估是否收進 `human-writing/`。
+- 上游分支：無新增獨佔 commit 的分支（維持前輪結論）。
