@@ -107,3 +107,9 @@ commit 水位。那兩個面向不是「查過沒發現」，是根本沒查，�
 **決定**：`requirements-dev.txt` 改為 `ruff>=0.17`。
 
 **理由**：Dependency freshness 回報 PyPI 最新 0.17.2。ruff 0.17.2 的 `requires_python` 是 `>=3.7`，不卡本 repo 的 3.9 下限；以 0.17.2 實跑 `ruff check --select E9,F --target-version py39`、pytest、`validate_skill.py`、`check_links.py` 全綠。pytest 仍以 `# freshness-hold` 留在 8.x（pytest 9 需要 Python ≥ 3.10）。
+
+## 2026-10-25（更正）：ruff 下限退回 0.16，改以 freshness-hold 記錄
+
+**決定**：`requirements-dev.txt` 改回 `ruff>=0.16  # freshness-hold: ...`，撤銷上一條「0.16 → 0.17」。
+
+**理由**：維護者規則是新鮮度紅燈不能靠提高宣告下限消掉，只有程式真的需要新版才提高。本 repo 的 ruff 只跑 `check --select E9,F`，0.17 沒有任何本 tree 需要的功能，CI 也總是裝最新版，下限不是閘門。上一條提高下限只是為了讓 Dependency freshness 轉綠，不符規則。觸發條件：程式開始依賴 0.17 才有的規則或行為時，再提高下限並移除 hold。
