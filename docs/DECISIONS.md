@@ -94,3 +94,16 @@ commit 水位。那兩個面向不是「查過沒發現」，是根本沒查，�
 - issue：水位 #8 以上沒有新項目。
 - PR #9「feat: add English translation」（OPEN，+1309 行，新增 `README_en.md`、`SKILL_en.md`、`references/*_en.md`、`agents/openai_en.yaml` 等平行英文檔）：**不適用，不採用**。本 fork 的公開入口已自行維護 `README.en.md`（見 `AGENTS.md`），且硬性邊界規定產品 Skill、references 只跟隨上游簡體原文、不新增翻譯版本；上游尚未合併。觸發條件：上游合併 #9 後，隨 commit 軸抵達時再評估是否收進 `human-writing/`。
 - 上游分支：無新增獨佔 commit 的分支（維持前輪結論）。
+
+## 2026-10-25：第四輪上游審查（PR 水位 #10）
+
+- commit：`4fda173` 之後 0 個新 commit，baseline commit 不變。
+- issue：水位 #8 以上沒有新項目。
+- PR #10「压缩 SKILL.md 的 description，补上排除语，节约上下文窗口」（OPEN，TZPlus，2026-10-19，head `1fad366`，只改 `human-writing/SKILL.md` frontmatter 一行）：**不採用**。它把 description 從約 325 字壓到約 287 字（PR 說明自稱 969→287），拿掉「成稿正文严禁冒号、破折号、“不是……而是……”」等硬禁令敘述，另加「不觸發：公文／合同／技術文檔／代碼／翻譯／列表式短回覆」。description 決定 Agent 何時載入 Skill，屬上游公開契約；本 fork 規定產品 `SKILL.md` 以上游為準，上游尚未合併，fork 先改等於替上游做產品取捨。現行 description 在 `validate_skill.py` 下 0 警告，本 fork 沒有可重現的缺陷。觸發條件：上游合併 #10（隨 commit 軸抵達時照常 merge），或本 fork 實測出現誤觸發／description 超出某個 Agent 的長度上限。
+- 上游分支：`feat/workbuddy-expert` 仍是 PR #6 的 head `ea50a60`，無新增分支。
+
+## 2026-10-25：ruff 下限 0.16 → 0.17
+
+**決定**：`requirements-dev.txt` 改為 `ruff>=0.17`。
+
+**理由**：Dependency freshness 回報 PyPI 最新 0.17.2。ruff 0.17.2 的 `requires_python` 是 `>=3.7`，不卡本 repo 的 3.9 下限；以 0.17.2 實跑 `ruff check --select E9,F --target-version py39`、pytest、`validate_skill.py`、`check_links.py` 全綠。pytest 仍以 `# freshness-hold` 留在 8.x（pytest 9 需要 Python ≥ 3.10）。

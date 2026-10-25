@@ -1,7 +1,7 @@
 # Repository review（Windows-first）
 
 - Review date: 2026-08-22
-- Review baseline: 見本檔「已修」對應 commit；開放項已在 `fix/review-findings` 處理
+- Review baseline: R-01～R-08 已全部落地 `main`（`fix/review-findings` 分支已移除）
 - Upstream reviewed through: `4fda173f3fef7fb808f3eba991eeb2528ea4b189`
 - Primary environment: Windows 11、PowerShell、Python 3.14.7（本機）、CI Windows 3.14 / Ubuntu 3.9–3.14
 - Status: 維護骨架可用；產品規則未改；`check_prose.py` 僅有 UTF-8 stdio 的 fork 修正
@@ -48,7 +48,7 @@ pwsh -NoProfile -File tools\dev_check.ps1
 
 - 產品 Python 無 `os.system`、`shell=True`、`eval(`、`exec(`、`pickle`。
 - URL／code fence 的冒號會被遮罩。
-- 產品 `SKILL.md` 仍是寫作規格；`AGENTS.md` / `CLAUDE.md` 分開。
+- 產品 `SKILL.md` 仍是寫作規格；維護規則只放 `AGENTS.md`。
 - Dependabot 不自動合併。
 - 本 fork 無自己的 GitHub Release；產品版本仍是上游 `1.1.0`。
 

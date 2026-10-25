@@ -84,3 +84,8 @@ open issue 仍為 #2／#3／#7／#8，皆未超過水位。
 ## 2026-09-30：第三輪 triage，PR 水位推進到 `#9`
 
 commit 與 issue 軸無變化；PR #9（英文翻譯）不採用，理由見 [`DECISIONS.md`](DECISIONS.md) 2026-09-30 條目。
+
+## 2026-10-25：第四輪 triage，PR 水位推進到 `#10`
+
+commit 與 issue 軸無變化；PR #10（壓縮 `SKILL.md` description）不採用，理由見 [`DECISIONS.md`](DECISIONS.md) 2026-10-25 條目。
+PR／issue 狀態以 `git ls-remote upstream` 的 `refs/pull/*` 與 GitHub 網頁核對（本輪雲端環境的 `gh` 未登入）。
