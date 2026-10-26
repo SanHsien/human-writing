@@ -113,3 +113,27 @@ def test_upstream_slug(url, expected):
 def test_shipped_baseline_matches_the_documented_upstream():
     baseline = checker.load_baseline()
     assert checker.upstream_slug(baseline["repo"]) is not None
+
+
+def test_missing_gh_is_reported_as_unavailable_not_a_crash(monkeypatch):
+    """No `gh` on PATH must read "not checked", not die with a traceback.
+
+    The docstring promises None whenever gh cannot answer; a bare
+    FileNotFoundError skips the report entirely and exits 1, which --strict
+    callers read as "there is something to review".
+    """
+
+    def no_gh(args, **kwargs):
+        raise FileNotFoundError(2, "No such file or directory", args[0])
+
+    monkeypatch.setattr(checker.subprocess, "run", no_gh)
+    assert checker.collect_new_tickets(BASELINE, "pr") is None
+
+
+def test_missing_git_is_a_check_error_not_a_crash(monkeypatch, tmp_path):
+    def no_git(args, **kwargs):
+        raise FileNotFoundError(2, "No such file or directory", args[0])
+
+    monkeypatch.setattr(checker.subprocess, "run", no_git)
+    with pytest.raises(checker.UpstreamCheckError):
+        checker.run_git(["status"], tmp_path)
