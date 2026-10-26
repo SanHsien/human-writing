@@ -95,8 +95,20 @@ def parse_frontmatter(text):
 
 
 def get_scalar(fm, key):
-    m = re.search(rf"^{re.escape(key)}:\s*(.*)$", fm, re.MULTILINE)
-    return m.group(1).strip().strip('"').strip("'") if m else None
+    m = re.search(rf"^{re.escape(key)}:[ 	]*(.*)$", fm, re.MULTILINE)
+    if not m:
+        return None
+    value = m.group(1).strip()
+    if re.fullmatch(r"[>|][+-]?[0-9]?", value):
+        # Block scalar: the value is the indented lines that follow.
+        lines = []
+        for ln in fm[m.end():].splitlines()[1:]:
+            if ln.strip() and not ln[:1].isspace():
+                break
+            lines.append(ln.strip())
+        joined = (" " if value[0] == ">" else chr(10)).join(x for x in lines if x)
+        return joined
+    return value.strip('"').strip("'")
 
 
 def get_list_items(fm, key):
@@ -117,6 +129,25 @@ def get_list_items(fm, key):
 def top_level_keys(fm):
     return [m.group(1) for ln in fm.splitlines()
             if (m := re.match(r"^([A-Za-z][\w-]*):", ln))]
+
+
+def split_tool_list(text):
+    """Split on commas or whitespace, but never inside parentheses."""
+    items, depth, current = [], 0, ""
+    for ch in text:
+        if ch == "(":
+            depth += 1
+        elif ch == ")":
+            depth = max(0, depth - 1)
+        if depth == 0 and (ch == "," or ch.isspace()):
+            if current:
+                items.append(current)
+            current = ""
+        else:
+            current += ch
+    if current:
+        items.append(current)
+    return items
 
 
 def tool_base(entry):
@@ -157,7 +188,7 @@ def audit(path, lens="claude"):
     if not tools:
         inline = get_scalar(fm, "allowed-tools")
         if inline:
-            tools = inline.split()
+            tools = split_tool_list(inline)
     if tools:  # a restriction is declared -> the host enforces it
         bases = {tool_base(t) for t in tools}
         known = {b for b in bases if b in rules["tools"]}

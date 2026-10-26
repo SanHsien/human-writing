@@ -105,3 +105,35 @@ def test_missing_link_with_title_is_still_reported(tmp_path: Path, monkeypatch) 
     doc = _linked_doc(tmp_path, monkeypatch, '[t](gone.md "title")\n')
     problems = check_links.check_document(doc)
     assert len(problems) == 1 and "gone.md" in problems[0]
+
+
+def _audit_text(tmp_path: Path, frontmatter: str, body: str = "body\n"):
+    path = tmp_path / "SKILL.md"
+    path.write_text("---\n" + frontmatter + "---\n" + body, encoding="utf-8")
+    return validate_skill.audit(str(path), lens="claude")
+
+
+def test_comma_separated_allowed_tools_are_recognised(tmp_path: Path) -> None:
+    """`allowed-tools: Bash, Read` grants Bash; it is not an unknown tool 'Bash,'."""
+    errors, warns = _audit_text(
+        tmp_path,
+        "name: x\ndescription: d\nallowed-tools: Bash, Read\n",
+        "```bash\nls\n```\n",
+    )
+    assert errors == []
+    assert warns == []
+
+
+def test_scoped_bash_grant_with_space_stays_one_tool(tmp_path: Path) -> None:
+    errors, warns = _audit_text(
+        tmp_path, "name: x\ndescription: d\nallowed-tools: Bash(python3 *) Read\n"
+    )
+    assert errors == []
+    assert warns == []
+
+
+def test_folded_description_length_is_checked(tmp_path: Path) -> None:
+    errors, _warns = _audit_text(
+        tmp_path, "name: x\ndescription: >\n  " + "a" * 1100 + "\n"
+    )
+    assert any("1024" in item for item in errors)
