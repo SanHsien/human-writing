@@ -72,3 +72,36 @@ def test_ci_covers_python_314() -> None:
     assert "windows / py3.14" in workflow
 
 
+
+
+def _linked_doc(tmp_path: Path, monkeypatch, body: str) -> Path:
+    (tmp_path / "a.md").write_text("x", encoding="utf-8")
+    doc = tmp_path / "doc.md"
+    doc.write_text(body, encoding="utf-8")
+    monkeypatch.setattr(check_links, "ROOT", tmp_path)
+    return doc
+
+
+def test_link_title_is_not_part_of_the_target(tmp_path: Path, monkeypatch) -> None:
+    """`[t](a.md "title")` is valid Markdown; a.md exists, so it must not fail."""
+    doc = _linked_doc(tmp_path, monkeypatch, '[t](a.md "title") [u](a.md \'t\')\n')
+    assert check_links.check_document(doc) == []
+
+
+def test_link_query_string_is_not_part_of_the_target(tmp_path: Path, monkeypatch) -> None:
+    doc = _linked_doc(tmp_path, monkeypatch, "[t](a.md?plain=1)\n")
+    assert check_links.check_document(doc) == []
+
+
+def test_links_inside_code_are_examples_not_links(tmp_path: Path, monkeypatch) -> None:
+    body = ("```md" + chr(10) + "[x](nope.md)" + chr(10) + "```" + chr(10) * 2
+            + "`[y](nope2.md)`" + chr(10) * 2
+            + "~~~" + chr(10) + "[z](nope3.md)" + chr(10) + "~~~" + chr(10))
+    doc = _linked_doc(tmp_path, monkeypatch, body)
+    assert check_links.check_document(doc) == []
+
+
+def test_missing_link_with_title_is_still_reported(tmp_path: Path, monkeypatch) -> None:
+    doc = _linked_doc(tmp_path, monkeypatch, '[t](gone.md "title")\n')
+    problems = check_links.check_document(doc)
+    assert len(problems) == 1 and "gone.md" in problems[0]

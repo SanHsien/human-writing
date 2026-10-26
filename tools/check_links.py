@@ -25,6 +25,9 @@ HTML_SRC_PATTERN = re.compile(r"""(?is)<img[^>]+src=["']([^"']+)["']""")
 SKILL_PATH_PATTERN = re.compile(
     r"`((?:references|scripts|dist|agents)/[A-Za-z0-9._/-]+\.(?:md|py|ya?ml))(?:\s[^`]*)?`"
 )
+FENCE_PATTERN = re.compile(r"^ {0,3}(`{3,}|~{3,}).*?^ {0,3}\1[`~]*[ \t]*$", re.M | re.S)
+INLINE_CODE_PATTERN = re.compile(r"(`+)(?:(?!\1).)+?\1", re.S)
+TITLE_SUFFIX_PATTERN = re.compile(r"""\s+(?:"[^"]*"|'[^']*'|\([^)]*\))\s*$""")
 SKIP_PREFIXES = ("http://", "https://", "mailto:", "tel:", "#")
 
 
@@ -49,10 +52,14 @@ def iter_documents() -> list[Path]:
 
 
 def _missing_relative(path: Path, target: str) -> str | None:
+    target = target.strip()
+    if not target.startswith("<"):
+        # `[t](a.md "title")`: the title is not part of the path.
+        target = TITLE_SUFFIX_PATTERN.sub("", target)
     target = target.strip().strip("<>")
     if not target or target.startswith(SKIP_PREFIXES):
         return None
-    file_part = unquote(target.split("#", 1)[0])
+    file_part = unquote(re.split(r"[#?]", target, maxsplit=1)[0])
     if not file_part:
         return None
     resolved = (path.parent / file_part).resolve()
@@ -67,7 +74,8 @@ def _missing_relative(path: Path, target: str) -> str | None:
 
 def check_document(path: Path) -> list[str]:
     problems: list[str] = []
-    text = path.read_text(encoding="utf-8")
+    # Links shown inside code are examples, not links this repo has to keep alive.
+    text = INLINE_CODE_PATTERN.sub("", FENCE_PATTERN.sub("", path.read_text(encoding="utf-8")))
     for pattern in (LINK_PATTERN, IMAGE_PATTERN, HTML_SRC_PATTERN):
         for match in pattern.finditer(text):
             missing = _missing_relative(path, match.group(1))
