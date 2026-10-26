@@ -76,3 +76,40 @@ def test_baseline_matches_decisions_record() -> None:
     )
 
     assert baseline["reviewed_date"] in decisions
+
+
+def test_pypi_fetch_survives_truncated_and_malformed_responses(monkeypatch) -> None:
+    """A cut-off or odd PyPI body must read as 'check failed', not crash the run."""
+    import http.client
+    import io
+
+    import check_dependency_freshness as fresh
+
+    class Resp(io.BytesIO):
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *exc):
+            return False
+
+    def truncated(request, timeout=0):
+        class Bad:
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *exc):
+                return False
+
+            def read(self):
+                raise http.client.IncompleteRead(b"{")
+
+        return Bad()
+
+    monkeypatch.setattr(fresh.urllib.request, "urlopen", truncated)
+    assert fresh.fetch_pypi_version("pytest") is None
+
+    for body in (b"[]", b'{"info": null}', b'"x"'):
+        monkeypatch.setattr(
+            fresh.urllib.request, "urlopen", lambda r, timeout=0, b=body: Resp(b)
+        )
+        assert fresh.fetch_pypi_version("pytest") is None

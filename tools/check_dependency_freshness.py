@@ -15,6 +15,7 @@ changelog and run the suite, not a merge.
 from __future__ import annotations
 
 import argparse
+import http.client
 import json
 import os
 import re
@@ -126,9 +127,10 @@ def fetch_pypi_version(package_name: str, timeout: float = 10.0) -> str | None:
     try:
         with urllib.request.urlopen(request, timeout=timeout) as response:  # noqa: S310
             payload = json.loads(response.read().decode("utf-8"))
-    except (OSError, ValueError):
+    except (OSError, ValueError, http.client.HTTPException):
         return None
-    version = payload.get("info", {}).get("version")
+    info = payload.get("info") if isinstance(payload, dict) else None
+    version = info.get("version") if isinstance(info, dict) else None
     return str(version) if version else None
 
 
