@@ -113,3 +113,15 @@ commit 水位。那兩個面向不是「查過沒發現」，是根本沒查，�
 **決定**：`requirements-dev.txt` 改回 `ruff>=0.16  # freshness-hold: ...`，撤銷上一條「0.16 → 0.17」。
 
 **理由**：維護者規則是新鮮度紅燈不能靠提高宣告下限消掉，只有程式真的需要新版才提高。本 repo 的 ruff 只跑 `check --select E9,F`，0.17 沒有任何本 tree 需要的功能，CI 也總是裝最新版，下限不是閘門。上一條提高下限只是為了讓 Dependency freshness 轉綠，不符規則。觸發條件：程式開始依賴 0.17 才有的規則或行為時，再提高下限並移除 hold。
+
+## 2026-10-28：第五輪上游審查（issue 水位 #11）
+
+- commit：`4fda173` 之後 0 個新 commit（`git log -1 upstream/main` 仍是 `4fda173`），baseline commit 不變。
+- PR：水位 #10 以上沒有新項目；現有 6 筆（#1、#4、#5、#6、#9、#10）head 與前輪相同（#10 `1fad366`、#9 `c5ee9bf`、#6 `ea50a60`、#5 `c9b047c`），沒有 force-push。
+- issue #11「Optional: publicly verifiable certificate for human-writing (one workflow file)」（OPEN，外部作者 shawnbure，2026-10-26，無留言，無 diff、無 PR）：**不採用**。內容是邀請在本 repo 新增 `.github/workflows/workrr.yml`，以 `uses: workrr-trust/certify/.github/workflows/certify.yml@v0.1.3` 呼叫第三方 org 的 reusable workflow，並授予 `id-token: write`、`attestations: write`。
+  - 理由（誰的理由，判準七）：這是發佈憑證服務的推廣方的理由。本 fork 是維護型 fork，不發佈套件、不對下游簽署，沒有需要「公開可驗證憑證」的使用者；對本 fork 唯一的實際效果是讓外部 org 的程式碼在 `main` 與 `v*` tag 推送時以 OIDC 簽署權限執行。
+  - 證據：本 fork 現有四支 workflow（`.github/workflows/ci.yml`、`codeql.yml`、`dependency-freshness.yml`、`upstream-check.yml`）沒有任何一支要求 `id-token` 或 `attestations` 權限，`grep -rn "id-token\|attestations\|workrr\|Sigstore"` 在 repo 內無命中；既有 action 全是 GitHub 官方 action，其中 `ci.yml:31`、`codeql.yml:28`、`upstream-check.yml:37` 釘 commit SHA（`dependency-freshness.yml:39` 用 `@v7`），沒有任何外部 org 的 workflow；issue 提供的是 tag `v0.1.3`（附 commit `46c524b`），採用等於新增並長期審查一個本 fork 現在沒有的外部信任邊界。issue 所稱「`human-writing` 在 `4fda173` 通過檢查」無法自行驗證，也不是缺陷回報；issue 本文沒有隱藏內容（對 body 做 `\S\s{40,}\S` 掃描無命中）。
+  - 上游並未採用此提議（無維護者回覆、無 PR）；對上游做任何回應不在本 fork 範圍。
+  - 觸發條件：上游維護者採用該 workflow（隨 commit 軸抵達），或本 fork 之後要對外發佈 release／套件並需要簽署來源證明時，改以 GitHub 原生 `actions/attest-build-provenance` 評估，不另引入第三方 reusable workflow。
+- 上游分支：維持前輪結論（`feat/workbuddy-expert` 仍是 PR #6 的 head `ea50a60`）。
+

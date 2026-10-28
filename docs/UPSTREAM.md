@@ -89,3 +89,8 @@ commit 與 issue 軸無變化；PR #9（英文翻譯）不採用，理由見 [`D
 
 commit 與 issue 軸無變化；PR #10（壓縮 `SKILL.md` description）不採用，理由見 [`DECISIONS.md`](DECISIONS.md) 2026-10-25 條目。
 PR／issue 狀態以 `git ls-remote upstream` 的 `refs/pull/*` 與 GitHub 網頁核對（本輪雲端環境的 `gh` 未登入）。
+
+## 2026-10-28：第五輪 triage，issue 水位推進到 `#11`
+
+commit 與 PR 軸無變化；issue #11（第三方憑證 workflow 推廣）不採用，理由與觸發條件見 [`DECISIONS.md`](DECISIONS.md) 2026-10-28 條目。
+
