@@ -22,7 +22,7 @@ def test_skill_name_and_version_files() -> None:
     version = (ROOT / "human-writing" / "VERSION").read_text(encoding="utf-8").strip()
 
     assert "name: human-writing" in text
-    assert version == "1.1.0"
+    assert version == "1.2.0"
     assert f"活人感写作 {version}" in text
 
 
