@@ -8,7 +8,7 @@
 
 ## 結論
 
-這個 fork 適合作為 Windows 本機、給 Agent 裝「活人感寫作」Skill 的維護線。產品行為跟隨上游 1.1.0。檢查腳本只讀本機稿件、只報警、不改稿、不上傳。
+這個 fork 適合作為 Windows 本機、給 Agent 裝「活人感寫作」Skill 的維護線。產品行為跟隨上游 1.2.0。檢查腳本只讀本機稿件、只報警、不改稿、不上傳。
 
 2026-08-22 審查列出的 R-01～R-08，fork 能修的都修了。**沒有**把警告層升成硬失敗，也**沒有**放寬「不只……還……」正則，也**沒有**回貢上游。
 
@@ -50,7 +50,7 @@ pwsh -NoProfile -File tools\dev_check.ps1
 - URL／code fence 的冒號會被遮罩。
 - 產品 `SKILL.md` 仍是寫作規格；維護規則只放 `AGENTS.md`。
 - Dependabot 不自動合併。
-- 本 fork 無自己的 GitHub Release；產品版本仍是上游 `1.1.0`。
+- 本 fork 無自己的 GitHub Release；產品版本仍是上游 `1.2.0`。
 
 ## 尚未宣稱範圍
 

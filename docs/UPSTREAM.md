@@ -94,3 +94,10 @@ PR／issue 狀態以 `git ls-remote upstream` 的 `refs/pull/*` 與 GitHub 網�
 
 commit 與 PR 軸無變化；issue #11（第三方憑證 workflow 推廣）不採用，理由與觸發條件見 [`DECISIONS.md`](DECISIONS.md) 2026-10-28 條目。
 
+## 2026-11-09：第六輪 triage，commit 水位推進到 `5c0c30d`，PR 水位推進到 `#15`
+
+- commit 軸：增量 6 個 commit（`6a712f3`、`ae1885d`、`2c7641c`、`ad6ac4e`、`11a8f49`、`5c0c30d`），tip 抵達 `5c0c30d33648deef4a6ed69e5def87adb858f3e2`（上游發佈 `v1.2.0`）。除 `6a712f3`（PR #1 舊項目，本 fork 覆蓋更廣不採）外，其餘項目均已逐項審查、完成先紅後綠測試並移植進產品程式、文檔與測試。
+- PR 軸：水位由 `#10` 推進至 `#15`。新增 4 筆 PR（#12–#15），皆對應上述已合併之 commit。
+- issue 軸：無新增項目，水位維持 `#11`。
+- 上游分支：`main`（`5c0c30d`）；先前帶獨佔 commit 之 `feat/workbuddy-expert` 在遠端已移除。
+- 逐項分析、取捨與驗收證據見 [`DECISIONS.md`](DECISIONS.md) 2026-11-09 條目。

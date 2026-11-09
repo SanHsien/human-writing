@@ -132,3 +132,42 @@ commit 水位。那兩個面向不是「查過沒發現」，是根本沒查，�
 **理由**：`ubuntu-latest` 已換成 Ubuntu 26.04，`actions/setup-python` 在該映像沒有 Python 3.9（官方 versions-manifest 的 3.9.25 只有 22.04、24.04），Set up Python 步驟會失敗：`The version '3.9' with architecture 'x64' was not found for Ubuntu 26.04`。此舉保住既有 Python 3.9 支援宣告的測試，不縮減矩陣。
 
 **重審條件**：`ubuntu-24.04` runner 退役或停止支援 Python 3.9、`setup-python` 補上 26.04 的 3.9 build、或決定放棄 Python 3.9 支援時，移除此釘版。
+
+## 2026-11-09：第六輪上游審查（commit 水位 5c0c30d、PR 水位 #15）
+
+上游發佈 1.2.0，累計 6 個 commit、4 筆新 PR（#12–#15），issue 無增量（維持 #11）。
+
+### Commit 逐項審查與處置
+
+1. `6a712f3`（2026-11-08，PR #1，`test: cover check_prose CLI behavior (#1)`，diff `+72 −0`，`README.md`、`tests/test_check_prose.py`）：**不移植**。
+   - 理由：本 fork 在 2026-08-22（fork 起點）已盤點 PR #1 並於 `docs/UPSTREAM.md:44-46` 記錄結論；本 fork 現有 `tests/test_check_prose.py`（192 行、15 個測試案例）覆蓋範圍更廣（含 stdin、CP950、退出碼、遮罩、URL 冒號等路徑），且上游那份斷言簡體輸出字串「未发现这份检查器覆盖的问题」，引入會造成重複且語系斷言衝突。上游在 `README.md` 增加的 unittest 說明，本 fork 走 `tools\dev_check.ps1`（pytest）。
+   - 證據：`git diff --stat 4fda173..6a712f3` 顯示僅異動 `README.md` 與 `tests/test_check_prose.py`。
+2. `ae1885d`（2026-11-08，PR #13，`fix(check_prose): 时间与比例里的冒号不再误判，连续破折号按一处计数 (#13)`，diff `+55 −1`，`human-writing/scripts/check_prose.py`、`tests/test_punctuation.py`）：**移植（採用）**。
+   - 理由：修正了標點檢測的真實缺陷：時間（如 `10:30`）、比例（如 `1:1`、`3：2`）兩側為數字時不再誤判為提示性冒號；連續全形破折號 `——` 改為以 `+` 貪婪匹配計為 1 處（原按字元算成 2 處）。
+   - 先紅後綠證據：在舊版 `check_prose.py` 上執行 `10:30` 返回 1（報英文冒號錯誤）、`——` 報 2 處破折號；移植後 `10:30` 返回 0、`——` 報 1 處破折號。新測試收錄於 `tests/test_punctuation.py`。
+3. `2c7641c`（2026-11-08，PR #12，`feat(check_prose): 补上套话开头收尾与「不仅仅是……而是……」检测，修复路标行号 (#12)`，diff `+138 −8`，`CHANGELOG.md`、`human-writing/SKILL.md`、`references/revision.md`、`scripts/check_prose.py`、`tests/test_template_frames.py`）：**移植（採用）**。
+   - 理由：將規則文件早有規定但腳本未實作的硬禁令補齊：「在當今……時代」「在這個……的時代」「眾所周知」「讓我們……吧」列入硬禁令；「總而言之」「綜上所述」併入模型路標；「首先……其次……最後」提綱骨架列入警告；「不僅僅是/不只是……而是……」併入禁用翻案句；並修復路標與長前置成分行號偏到上一段的問題。同步更新 `SKILL.md` 與 `revision.md` 禁令清單。
+   - 先紅後綠證據：在舊版 `check_prose.py` 上執行 `咖啡不仅仅是一种饮品，而是一种生活方式。` 與 `在当今快节奏的时代，大家都很忙。` 皆回傳 0（漏判）；移植後兩者皆正確回傳 1（分別命中禁用翻案句與時代套話開頭）。新測試收錄於 `tests/test_template_frames.py`。
+4. `ad6ac4e`（2026-11-08，PR #14，`docs(fiction): 写明心理与神态照样要写，只删动作后面重复的情绪翻译 (#14)`，diff `+7 −1`，`human-writing/references/fiction.md`、`references/revision.md`）：**移植（採用）**。
+   - 理由：在虛構寫作參考文檔中明確界定心理與神態的正面要求（只刪動作後面重複的情緒標籤，動作托不住的心理活動照樣要寫），補齊先前 issue #8 涉及的長篇人物心理被過度刪減問題，強化產品質素。
+5. `11a8f49`（2026-11-08，PR #10，`refactor: 压缩 SKILL.md description 并补充排除语 (#10)`，diff `+1 −1`，`human-writing/SKILL.md`）：**移植（採用）**。
+   - 理由：本 fork 在 2026-10-25 審查 PR #10 時記錄觸發條件為「上游合併 #10（隨 commit 軸抵達時照常 merge）」。上游已在 `11a8f49` 正式合併，觸發條件達成。
+6. `5c0c30d`（2026-11-08，PR #15，`1.2.0 处理社区反馈，重写 README，补 Claude Code 安装入口和 CI (#15)`，diff `+348 −64`，14 個檔案）：**部分移植／對齊（依檔案職責分別處理）**。
+   - 產品目錄 `human-writing/`：
+     - `VERSION`：更新至 `1.2.0`。
+     - `SKILL.md`：標題更新至 `1.2.0`。
+     - `dist/human-writing-lite.md`：同步更新至 1.2.0。
+     - `references/revision.md`：同步修訂。
+     - `scripts/check_prose.py`：移植 Markdown 表格對齊列 `:---` 冒號放行、套話位置判斷等優化，**嚴格保留本 fork 的 UTF-8 stdio CP950 重設程式碼（第 14–19 行）**。
+   - 封裝與設定：
+     - `.claude-plugin/marketplace.json`：移植（Claude Code 外掛市場資訊）。
+     - `.gitattributes`：合併。保留本 fork 自初始版本起的 6 條規則（`*.sh`、`*.py`、`*.md`、`*.yml`、`*.yaml` 為 `eol=lf`，`*.ps1` 為 `eol=crlf`），只把預設行 `* text=auto` 改為上游的 `* text=auto eol=lf`。副檔名規則比 `*` 具體，優先於預設行，所以 `*.ps1` 仍是 CRLF。
+     - `CHANGELOG.md`：同步上游 1.2.0 變更記錄。
+     - `assets/readme-cover.svg`：跟進上游，封面文字由 `HUMAN WRITING · 1.0.0` 改為 `HUMAN WRITING`（拿掉版本字樣，不是改成 1.2.0）。
+   - 測試：
+     - `tests/test_package.py`、`tests/test_punctuation.py`、`tests/test_template_frames.py`：移植，驗證套件與規則一致性。
+     - 本 fork 原有 `tests/test_docs.py` 同步調整版本檢查（`assert version == "1.2.0"`）。
+   - 文件：
+     - `README.md` / `README.en.md`：依 `AGENTS.md:39` 將上游 1.2.0 內容翻譯整合進繁中 `README.md` 與英文 `README.en.md`，並確保繁中 `README.md` 符合 `check_prose.py` 規則（exit 0）。
+   - CI：
+     - `.github/workflows/validate.yml`：**不移植**。本 fork 已有覆蓋更完整的 `.github/workflows/ci.yml`（包含 Python 3.9–3.14 矩陣、Windows 原生 Python 3.14 runner、ruff、pytest、Skill 規格驗證與連結檢查）。
