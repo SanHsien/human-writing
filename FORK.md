@@ -22,11 +22,12 @@
 | `NOTICE.md` / `FORK.md` | 來源、授權與同步說明 |
 | `tools/dev_check.ps1` | Windows 本機一鍵 gate |
 | `human-writing/scripts/check_prose.py` | 唯一產品程式修正：stdio 重設為 UTF-8，避免 Windows CP950 崩潰 |
+| `tests/test_punctuation.py`、`tests/test_template_frames.py` | 移植的上游測試，`subprocess.run` 加 `encoding="utf-8"`，避免 Windows CP950 下送輸入失敗而卡住 |
 | `.github/workflows/ci.yml` | Ubuntu 3.9–3.14 + Windows Python 3.14：pytest / ruff / Skill 驗證 / 連結與裝包路徑檢查 |
 | `.github/workflows/upstream-check.yml` | 每週對 `upstream/main` 做未審查 commit 檢查 |
 | `docs/DECISIONS.md`、`docs/UPSTREAM.md`、`docs/DEVELOPMENT.md` | fork 維護文件 |
 
-產品 `human-writing/SKILL.md`、`references/`、`dist/` 以上游為準。`scripts/check_prose.py` 僅允許已記錄的 UTF-8 stdio 修正，其餘行為跟隨上游。
+產品 `human-writing/SKILL.md`、`references/`、`dist/` 以上游為準。`scripts/check_prose.py` 僅允許已記錄的 UTF-8 stdio 修正，其餘行為跟隨上游。移植的上游測試只允許加 `encoding="utf-8"`（見 `docs/DECISIONS.md` 第六輪段）。
 
 ## 分支與 remote
 

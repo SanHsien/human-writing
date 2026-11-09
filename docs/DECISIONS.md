@@ -158,7 +158,7 @@ commit 水位。那兩個面向不是「查過沒發現」，是根本沒查，�
      - `SKILL.md`：標題更新至 `1.2.0`。
      - `dist/human-writing-lite.md`：同步更新至 1.2.0。
      - `references/revision.md`：同步修訂。
-     - `scripts/check_prose.py`：移植 Markdown 表格對齊列 `:---` 冒號放行、套話位置判斷等優化，**嚴格保留本 fork 的 UTF-8 stdio CP950 重設程式碼（第 14–19 行）**。
+     - `scripts/check_prose.py`：移植 Markdown 表格對齊列 `:---` 冒號放行、套話位置判斷等優化，**嚴格保留本 fork 的 UTF-8 stdio CP950 重設程式碼（第 13–18 行）**。
    - 封裝與設定：
      - `.claude-plugin/marketplace.json`：移植（Claude Code 外掛市場資訊）。
      - `.gitattributes`：合併。保留本 fork 自初始版本起的 6 條規則（`*.sh`、`*.py`、`*.md`、`*.yml`、`*.yaml` 為 `eol=lf`，`*.ps1` 為 `eol=crlf`），只把預設行 `* text=auto` 改為上游的 `* text=auto eol=lf`。副檔名規則比 `*` 具體，優先於預設行，所以 `*.ps1` 仍是 CRLF。
@@ -171,3 +171,6 @@ commit 水位。那兩個面向不是「查過沒發現」，是根本沒查，�
      - `README.md` / `README.en.md`：依 `AGENTS.md:39` 將上游 1.2.0 內容翻譯整合進繁中 `README.md` 與英文 `README.en.md`，並確保繁中 `README.md` 符合 `check_prose.py` 規則（exit 0）。
    - CI：
      - `.github/workflows/validate.yml`：**不移植**。本 fork 已有覆蓋更完整的 `.github/workflows/ci.yml`（包含 Python 3.9–3.14 矩陣、Windows 原生 Python 3.14 runner、ruff、pytest、Skill 規格驗證與連結檢查）。
+- fork 對移植測試的改寫：
+  - `tests/test_punctuation.py`、`tests/test_template_frames.py` 的 `subprocess.run` 加上 `encoding="utf-8"`。
+  - 原因：上游寫法在 Windows cp950 下送入簡體輸入時拋 `UnicodeEncodeError`，子行程等不到輸入而卡住，pytest 不會結束。上游 CI 跑 Linux 看不到這個問題，上游也有同樣缺陷；回貢上游需維護者同意。
