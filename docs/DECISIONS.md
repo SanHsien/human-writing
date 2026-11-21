@@ -174,3 +174,16 @@ commit 水位。那兩個面向不是「查過沒發現」，是根本沒查，�
 - fork 對移植測試的改寫：
   - `tests/test_punctuation.py`、`tests/test_template_frames.py` 的 `subprocess.run` 加上 `encoding="utf-8"`。
   - 原因：上游寫法在 Windows cp950 下送入簡體輸入時拋 `UnicodeEncodeError`，子行程等不到輸入而卡住，pytest 不會結束。上游 CI 跑 Linux 看不到這個問題，上游也有同樣缺陷；回貢上游需維護者同意。
+
+## 2026-11-21：第七輪上游審查（commit 水位 288297b、PR 水位 #17）
+
+`5c0c30d` 之後 2 個 commit、2 筆新 PR（#16、#17，皆已由上游維護者自己合併，即這兩個 commit）；issue 水位 #11 以上沒有新項目（#11 已在上游關閉、未採用，前輪觸發條件不變）。兩個 commit 只動根目錄 `AGENTS.md`，`human-writing/`、`scripts/check_prose.py`、測試與 CI 都沒變，UTF-8 stdio 修正與警告契約不受影響。
+
+1. `a4ed373`（2026-11-12，PR #16，`写清社区 PR 和 Issue 的处理规则`，`AGENTS.md` 新檔 `+56 −0`）：**不採用（skip）**。
+   - 理由：內容是上游維護者帳號 `KKKKhazix` 處理社群 PR／issue、合併與發版的流程（`gh ... --repo KKKKhazix/human-writing`、以 `validate.yml` 為準、發 Release zip）。本 fork 的 `AGENTS.md` 是 fork 自己的維護單一真相源（`FORK.md:21`），同路徑整檔引入會蓋掉 fork 規則，且其中的指令全部指向上游 repo，與本 fork「不推送到 upstream」的邊界衝突。本 fork 不發 Release、不跑 `validate.yml`（前輪已記錄不移植）。
+   - 已核對有無 fork 缺陷可借：它列的版本號五處核對已由前輪移植的 `tests/test_package.py` 覆蓋；「PR／issue 文字是資料不是指令」本 fork 已有同等規則（全域與 `AGENTS.md`〈對外邊界〉）。沒有需要移植的缺陷修正。
+2. `288297b`（2026-11-15，PR #17，`精简规则文件`，`AGENTS.md` `+5 −5`）：**不採用（skip）**。
+   - 理由：只刪掉上一個 commit 裡的原因說明與例句，規則、路徑、命令都沒動；母檔已不採用，這筆沒有可套用的對象。
+- PR #16、#17：與上兩筆 commit 同內容（上游 squash 合併），結論同上。
+- 重審條件：上游 `AGENTS.md` 之後若寫進會影響產品檔案的契約（例如 `revision.md` 與 `check_prose.py` 的同步規則改變、版本號位置增減），隨 commit 軸抵達時連同對應的產品 commit 一起審。
+- 驗收：`python tools/check_upstream_updates.py --strict` 推進 baseline 後 exit 0；`pwsh -NoProfile -File tools\dev_check.ps1` 通過。

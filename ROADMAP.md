@@ -9,14 +9,13 @@
 
 ## 近期：可以直接動手
 
-| 項目 | 為什麼 | 驗收方式 | 建議執行者 | 證據 |
-| --- | --- | --- | --- | --- |
-| 增量審查上游 | 觸發條件已成立（2026-11-21 查：`python tools/check_upstream_updates.py --strict` exit 1：baseline `5c0c30d` 後 2 個 commit）。原條件：超過 baseline 水位，或已審 PR head 改變 | 逐筆讀 diff 並記錄取捨；保留 UTF-8 stdio 修正與警告契約；Windows gate 通過後才更新 baseline | Codex | `tools/upstream_baseline.json`；`docs/DECISIONS.md`〈第六輪上游審查〉；`AGENTS.md:30,44-53` |
+目前沒有可直接動手的項目（2026-11-21 第七輪上游審查後）。
 
 ## 中期：等條件成立再做
 
 | 項目 | 觸發條件 | 驗收方式 | 建議執行者 | 證據 |
 | --- | --- | --- | --- | --- |
+| 增量審查上游 | `python tools/check_upstream_updates.py --strict` 報出 baseline `288297b` 之後的 commit、PR #17／issue #11 以上的新項目，或已審 PR head 改變 | 逐筆讀 diff 並記錄取捨；保留 UTF-8 stdio 修正與警告契約；Windows gate 通過後才更新 baseline | Codex | `tools/upstream_baseline.json`；`docs/DECISIONS.md`〈第七輪上游審查〉；`AGENTS.md:30,44-53` |
 | 補一篇真實長稿的寫作與改稿驗收 | 維護者提供一份可用且去識別的長稿材料（本機沒有可用的非私人真實材料；用合成稿只重做規則契約測試，不能代表文學性中文的誤傷情況） | 同一稿走材料核對、初稿、檢查與人工改稿，記錄硬失敗／人工警告及保留理由；確認原稿未被檢查器改寫、未提交私人材料 | 維護者提供材料後由 Claude Sonnet 執行 | `REVIEW.md`〈尚未宣稱範圍〉；`AGENTS.md:19,21,29` |
 | 修連結檢查器的孤立反引號處理 | 維護文件出現孤立反引號，且證明後續真連結被吞掉 | 新增跨段孤立反引號與真斷鏈的重現測試；真斷鏈需報錯、合法行內碼不誤報；`pwsh -NoProfile -File tools/dev_check.ps1` 通過 | Codex | 深掃報告（2026-10-26）〈刻意不修〉；`tools/check_links.py` 的行內碼處理 |
 | 驗證聊天介面的 lite 版本 | 維護者實際需要在 ChatGPT／千問直接貼上使用 | 選一個介面、一份合法來源做一次有停止條件的驗收，記錄貼入版本、輸出與規則限制；只報該宿主結果 | 維護者 | `REVIEW.md`〈尚未宣稱範圍〉；`human-writing/dist/human-writing-lite.md` |

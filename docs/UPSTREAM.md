@@ -101,3 +101,11 @@ commit 與 PR 軸無變化；issue #11（第三方憑證 workflow 推廣）不�
 - issue 軸：無新增項目，水位維持 `#11`。
 - 上游分支：`main`（`5c0c30d`）；先前帶獨佔 commit 之 `feat/workbuddy-expert` 在遠端已移除。
 - 逐項分析、取捨與驗收證據見 [`DECISIONS.md`](DECISIONS.md) 2026-11-09 條目。
+
+## 2026-11-21：第七輪 triage，commit 水位推進到 `288297b`，PR 水位推進到 `#17`
+
+- commit 軸：增量 2 個 commit（`a4ed373`、`288297b`），只動上游根目錄 `AGENTS.md`（上游維護者自己的社群處理流程），皆不採用。
+- PR 軸：#16、#17 即上述兩個 commit，結論相同。
+- issue 軸：無新增項目，水位維持 `#11`（#11 已在上游關閉）。
+- 上游分支：只剩 `main`（`288297b`）。
+- 逐項理由見 [`DECISIONS.md`](DECISIONS.md) 2026-11-21 條目。

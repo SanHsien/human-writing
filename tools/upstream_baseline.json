@@ -1,9 +1,9 @@
 {
   "repo": "https://github.com/KKKKhazix/human-writing.git",
   "branch": "main",
-  "reviewed_through": "5c0c30d33648deef4a6ed69e5def87adb858f3e2",
-  "reviewed_date": "2026-11-09",
-  "notes": "SanHsien fork baseline at clone time. HEAD is upstream main commit docs: 重写 README，去掉产品说明书腔. 2026-08-23 重驗：commit 增量 0；PR/issue 水位未動；上一輪「沒有任何分支帶獨佔 commit」的敘述有誤（feat/workbuddy-expert 有 1 個，即 PR #6 的 head），已在 docs/UPSTREAM.md 更正並補上 PR #5／#6 與 issue #8 的逐項證據。 2026-09-30：PR 水位 → 9（#9 英文翻譯不採用）；commit／issue 無增量。 2026-10-25：PR 水位 → 10（#10 壓縮 description 不採用）；commit／issue 無增量。 2026-10-28：issue 水位 → 11（#11 第三方憑證 workflow 推廣不採用）；commit／PR 無增量。 2026-11-09：commit 水位 → 5c0c30d（v1.2.0 發佈，審查 6 個 commit 並移植標點修復、套話開頭結尾檢測、虛構心理指引與 1.2.0 版本同步）；PR 水位 → 15（#12–#15 已審查）；issue 無增量。",
-  "reviewed_pr_through": 15,
+  "reviewed_through": "288297b6c2d9b6df23e0ceb64888443f15cfbcc3",
+  "reviewed_date": "2026-11-21",
+  "notes": "SanHsien fork baseline at clone time. HEAD is upstream main commit docs: 重写 README，去掉产品说明书腔. 2026-08-23 重驗：commit 增量 0；PR/issue 水位未動；上一輪「沒有任何分支帶獨佔 commit」的敘述有誤（feat/workbuddy-expert 有 1 個，即 PR #6 的 head），已在 docs/UPSTREAM.md 更正並補上 PR #5／#6 與 issue #8 的逐項證據。 2026-09-30：PR 水位 → 9（#9 英文翻譯不採用）；commit／issue 無增量。 2026-10-25：PR 水位 → 10（#10 壓縮 description 不採用）；commit／issue 無增量。 2026-10-28：issue 水位 → 11（#11 第三方憑證 workflow 推廣不採用）；commit／PR 無增量。 2026-11-09：commit 水位 → 5c0c30d（v1.2.0 發佈，審查 6 個 commit 並移植標點修復、套話開頭結尾檢測、虛構心理指引與 1.2.0 版本同步）；PR 水位 → 15（#12–#15 已審查）；issue 無增量。 2026-11-21：commit 水位 → 288297b（a4ed373、288297b 只動上游 AGENTS.md 維護流程，不採用）；PR 水位 → 17（#16、#17 即該兩 commit）；issue 無增量。",
+  "reviewed_pr_through": 17,
   "reviewed_issue_through": 11
 }
